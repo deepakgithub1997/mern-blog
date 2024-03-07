@@ -1,6 +1,8 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Logo from '../elements/Logo';
+import Sectionhead from '../elements/Sectionhead';
 
 const Signup = () => {
 
@@ -79,17 +81,21 @@ const Signup = () => {
 
   }
   return (
-    <div className="min-h-screen mt-20">
+    <div className="py-10 min-h-0 flex md:min-h-screen md:py-5">
       <div className="flex items-center p-3 max-w-3xl mx-auto flex-col md:flex-row gap-4">
         {/* LEFT */}
         <div className="flex-1">
-          <Link to="/" className="self-center whitespace-nowrap text-4xl font-semibold dark:text-white">
-            <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Sahand's</span> Blog
-          </Link>
+          <Logo size="text-4xl" />
           <p className='text-sm mt-5'>This is a demo project. You can sign up with your email and password or with Google. </p>
         </div>
         {/* RIGHT */}
         <div className="flex-1 w-full">
+          <Sectionhead text="Register" element="h2" />
+          {
+            ErrorMessage && (
+              <Alert className="mb  -4" color='failure'>{ErrorMessage}</Alert>
+            )
+          }
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div className="">
               <Label value="Your Username" />
@@ -118,13 +124,9 @@ const Signup = () => {
             </Button>
           </form>
           <div className="mt-5">
-            <p>Have an account? <Link to='/signin' className='text-blue-400'>Sign in</Link></p>
+            <p>Have an account? <Link to='/sign-in' className='text-blue-400'>Sign in</Link></p>
           </div>
-          {
-            ErrorMessage && (
-              <Alert className="mt-4" color='failure'>{ErrorMessage}</Alert>
-            )
-          }
+
         </div>
       </div>
     </div>
