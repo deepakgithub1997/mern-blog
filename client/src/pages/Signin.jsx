@@ -1,6 +1,6 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Sectionhead from '../elements/Sectionhead';
 import Logo from '../elements/Logo';
 
@@ -9,14 +9,55 @@ const Signin = () => {
   const [ErrorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const useNav = useNavigate();
 
   const inputHandler = (e) => {
     setformData({ ...formData, [e.target.id]: e.target.value });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (validateForm()) {
+      try {
+        setLoading(true);
+        const res = await fetch('/api/auth/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        })
+        const data = await res.json();
+        if (data.success === false) {
+          setLoading(false);
+          return setErrorMessage(data.message);
+        }
+        setLoading(false);
+        if (res.ok) {
+          useNav('/');
+        }
+      } catch (error) {
+        setErrorMessage(error.message);
+        setLoading(false);
+      }
+    }
+  }
 
+  const validateForm = () => {
+    let valid = true;
+    const { email, password } = formData;
+    const newErrors = {
+      email: "",
+      password: "",
+    };
+    if (email.trim() === '') {
+      newErrors.email = 'Please Enter Email';
+      valid = false;
+    }
+    if (password.trim() === '') {
+      newErrors.password = 'Please Enter Password';
+      valid = false;
+    }
+    setErrors(newErrors);
+    return valid;
   }
 
   return (
@@ -30,6 +71,11 @@ const Signin = () => {
         {/* RIGHT */}
         <div className="flex-1 w-full">
           <Sectionhead text="Login" element="h1" />
+          {
+            ErrorMessage && (
+              <Alert className="mb-4" color='failure'>{ErrorMessage}</Alert>
+            )
+          }
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
             <div className="">
               <Label value="Your Email" />
@@ -55,11 +101,7 @@ const Signin = () => {
           <div className="mt-5">
             <p>Dont Have an account? <Link to='/sign-up' className='text-blue-400'>Sign Up</Link></p>
           </div>
-          {
-            ErrorMessage && (
-              <Alert className="mt-4" color='failure'>{ErrorMessage}</Alert>
-            )
-          }
+
         </div>
       </div>
     </div>

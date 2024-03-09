@@ -78,8 +78,8 @@ const Signup = () => {
 
     setErrors(newErrors);
     return valid;
-
   }
+
   return (
     <div className="py-10 min-h-0 flex md:min-h-screen md:py-5">
       <div className="flex items-center p-3 max-w-3xl mx-auto flex-col md:flex-row gap-4">
