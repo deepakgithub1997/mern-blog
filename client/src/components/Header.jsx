@@ -2,14 +2,13 @@ import { Navbar, Button, TextInput } from 'flowbite-react';
 import { Link, useLocation } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FaMoon } from 'react-icons/fa';
+import Logo from '../elements/Logo';
 
 const Header = () => {
   const path = useLocation().pathname;
   return (
     <Navbar className="border-b-2">
-      <Link to="/" className="self-center whitespace-nowrap text-sm sm:text:xl font-semibold dark:text-white">
-        <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>Sahand's</span> Blog
-      </Link>
+      <Logo size="text-sm sm:text:xl font-semibold" />
       <form>
         <TextInput
           type="text"
