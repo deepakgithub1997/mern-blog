@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../elements/Logo';
 import Sectionhead from '../elements/Sectionhead';
+import OAuth from '../elements/OAuth';
 
 const Signup = () => {
 
@@ -122,6 +123,7 @@ const Signup = () => {
                 ) : "Sign up"
               }
             </Button>
+            <OAuth />
           </form>
           <div className="mt-5">
             <p>Have an account? <Link to='/sign-in' className='text-blue-400'>Sign in</Link></p>

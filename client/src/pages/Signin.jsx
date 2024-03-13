@@ -5,6 +5,7 @@ import Sectionhead from '../elements/Sectionhead';
 import Logo from '../elements/Logo';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInSuccess, signInStart, signInFailure } from '../redux/user/userSlice';
+import OAuth from '../elements/OAuth';
 
 const Signin = () => {
   const [errors, setErrors] = useState({});
@@ -96,6 +97,7 @@ const Signin = () => {
                 ) : "Sign in"
               }
             </Button>
+            <OAuth />
           </form>
           <div className="mt-5">
             <p>Dont Have an account? <Link to='/sign-up' className='text-blue-400'>Sign Up</Link></p>
