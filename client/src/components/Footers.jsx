@@ -3,7 +3,7 @@ import Logo from '../elements/Logo';
 
 const Footers = () => {
   return (
-    <Footer container className="border border-t-8 border-teal-500">
+    <Footer container className="border-t-8 border-teal-500">
       <div className="w-full">
         <div className="flex justify-between ">
           <div className="">
