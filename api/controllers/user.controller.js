@@ -23,7 +23,7 @@ export const updateUser = async (req, res, next) => {
     if (req.body.username.includes(" ")) {
       return next(errorHandler(400, 'username cannot contains spaces'));
     }
-    if (req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+    if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
       return next(errorHandler(400, 'Username can only contains letter and numbers'));
     }
   }
