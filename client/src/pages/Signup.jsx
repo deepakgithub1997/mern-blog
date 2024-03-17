@@ -36,18 +36,12 @@ const Signup = () => {
         const data = await res.json();
         if (data.success === false) {
           setLoading(false);
-          var dubkey = data.message.split("index:")[1].split("dup key")[0].split("_")[0];
-          if (dubkey.trim() == "username") {
-            return setErrorMessage("Username Exist!");
-          }
-          if (dubkey.trim() == "email") {
-            return setErrorMessage("Emial Exist!");
-          }
           return setErrorMessage(data.message);
         }
         setLoading(false);
         if (res.ok) {
           useNav('/sign-in');
+
         }
       } catch (error) {
         setErrorMessage(error.message);
@@ -94,7 +88,7 @@ const Signup = () => {
           <Sectionhead text="Register" element="h2" />
           {
             ErrorMessage && (
-              <Alert className="mb  -4" color='failure'>{ErrorMessage}</Alert>
+              <Alert className="mb-4" color='failure'>{ErrorMessage}</Alert>
             )
           }
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>

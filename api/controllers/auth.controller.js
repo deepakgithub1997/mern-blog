@@ -5,11 +5,38 @@ import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
-
-  const hashpassword = bcryptjs.hashSync(password, 10);
-
   if (!username || !email || !password || username === "" || password === "" || email === "") {
-    next(errorHandler(400, "All Fields Are Required"));
+    next((200, "All Fields Are Required"));
+  }
+  if (password) {
+    if (password.length < 6) {
+      return next(errorHandler(400, 'Password must be at least 6 Characters'));
+    }
+  }
+
+  if (username) {
+    if (username.length < 7 || username.length > 20) {
+      return next(errorHandler(400, 'username must be of 7 to 20 Characters'));
+    }
+    if (username.includes(" ")) {
+      return next(errorHandler(400, 'username cannot contains spaces'));
+    }
+    if (!username.match(/^[a-zA-Z0-9]+$/)) {
+      return next(errorHandler(400, 'Username can only contains letter and numbers'));
+    }
+  }
+  const hashpassword = bcryptjs.hashSync(password, 10);
+  try {
+    const validUser = await User.findOne({ username });
+    if (validUser) {
+      return next(errorHandler(200, "username already used"));
+    }
+    const validEmail = await User.findOne({ email });
+    if (validEmail) {
+      return next(errorHandler(200, "email already used"));
+    }
+  } catch (error) {
+    return next(error);
   }
 
   const newUser = new User({
@@ -17,10 +44,9 @@ export const signup = async (req, res, next) => {
     email,
     password: hashpassword,
   });
-
   try {
     await newUser.save();
-    res.json('Signup successful');
+    res.json({ statusCode: 200, message: 'Signup successful' });
   } catch (error) {
     next(error);
   }
@@ -28,11 +54,9 @@ export const signup = async (req, res, next) => {
 
 export const signin = async (req, res, next) => {
   const { email, password } = req.body;
-
   if (!email || !password || email === "" || password === "") {
     next(errorHandler(400, "All Fields Are Required"));
   }
-
   try {
     const validUser = await User.findOne({ email });
     if (!validUser) {
@@ -42,10 +66,8 @@ export const signin = async (req, res, next) => {
     if (!validPassword) {
       return next(errorHandler(404, "Invalid password"));
     }
-
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const { password: pass, ...rest } = validUser._doc;
-
     res.status(200).cookie('access_token', token, {
       httpOnly: true
     }).json(rest);
