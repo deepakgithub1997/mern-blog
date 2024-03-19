@@ -2,11 +2,12 @@ import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { HiUser, HiArrowSmRight } from 'react-icons/hi';
 import { Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
 
 
 const DashSidebar = () => {
+  const { currentUser } = useSelector(state => state.user);
   const location = useLocation();
   const dispatch = useDispatch();
   const [tab, setTab] = useState('');
@@ -36,7 +37,7 @@ const DashSidebar = () => {
       <Sidebar.Items className='md:min-h-screen'>
         <Sidebar.ItemGroup>
           <Link to="/dashboard/?tab=profile">
-            <Sidebar.Item active={tab === 'profile'} icon={HiUser} label={"User"} as='div'>
+            <Sidebar.Item active={tab === 'profile'} icon={HiUser} label={currentUser.isAdmin ? "admin" : "user"} as='div'>
               Profile
             </Sidebar.Item>
           </Link>
