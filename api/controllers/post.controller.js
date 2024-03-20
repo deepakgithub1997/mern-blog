@@ -12,15 +12,14 @@ export const create = async (req, res, next) => {
     return next(errorHandler(400, 'Please provide all required fileds'));
   }
   try {
-    const invalidTitle = Post.findOne({ title });
-    if (invalidTitle) {
-      return next(errorHandler(400, 'Title should be unique'));
+    const validTitle = await Post.findOne({ title });
+    if (validTitle) {
+      return next(errorHandler(400, 'Title should be Unique'));
     }
   } catch (error) {
     console.log(error);
   }
   const slug = createSlug(req.body.title);
-  console.log(slug);
   const newPost = new Post({
     ...req.body,
     slug,
