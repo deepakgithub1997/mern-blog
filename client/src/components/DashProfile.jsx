@@ -42,8 +42,8 @@ const DashProfile = () => {
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
-    const uplaodTask = uploadBytesResumable(storageRef, imageFile);
-    uplaodTask.on(
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+    uploadTask.on(
       'state_changed',
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -57,7 +57,7 @@ const DashProfile = () => {
         setImageFileUploading(false);
       },
       () => {
-        getDownloadURL(uplaodTask.snapshot.ref).then((downloadURL) => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileUrl(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
           setImageFileUploading(false);
