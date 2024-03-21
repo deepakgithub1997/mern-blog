@@ -33,6 +33,7 @@ const App = () => {
         {/* if admin and login */}
         <Route element={<PrivateRouteAdmin />}>
           <Route path="/createpost" element={<Createpost />} />
+          <Route path="/dashboard/?tab=posts" element={<Dashboard />} />
         </Route>
       </Routes>
       <Footers />

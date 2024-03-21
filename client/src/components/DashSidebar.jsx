@@ -46,9 +46,7 @@ const DashSidebar = () => {
                 Posts
               </Sidebar.Item>
             </Link>
-          )
-          }
-
+          )}
           <Sidebar.Item icon={HiArrowSmRight} onClick={handleSignOut}>
             SignOut
           </Sidebar.Item>
