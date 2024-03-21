@@ -4,16 +4,25 @@ import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react'
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { useNavigate } from 'react-router-dom';
 
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';
 
 const Createpost = () => {
+  const navigate = useNavigate();
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "",
+    image: "",
+    content: "",
+  });
+  const [publishError, setPublishError] = useState(null);
+
   const handleUploadImage = async () => {
     try {
       if (!file) {
@@ -38,7 +47,7 @@ const Createpost = () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             setImageUploadProgress(null);
             setImageUploadError(null);
-            setFormData({ ...formData, profilePicture: downloadURL });
+            setFormData({ ...formData, image: downloadURL });
           })
         }
       );
@@ -48,24 +57,94 @@ const Createpost = () => {
     }
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const res = await fetch('/api/post/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setPublishError(data.message);
+          return;
+        }
+        if (res.ok) {
+          setPublishError(null);
+          navigate(`/post/${data.slug}`);
+        }
+      }
+      catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  const [inputError, setInputError] = useState({});
+  const validateForm = () => {
+    let valid = true;
+    const { title, category, image, content } = formData;
+    const newErrors = {
+      title: "",
+      category: "",
+      image: "",
+      content: "",
+    };
+    if (title.trim() === "") {
+      newErrors.title = 'Please Enter Title';
+      valid = false;
+    }
+    // if (content.trim().length < 100) {
+    //   newErrors.content = 'Please Enter more than 100 Characters';
+    //   valid = false;
+    // }
+    if (image.trim() === "") {
+      newErrors.image = 'Please upload Image';
+      valid = false;
+    }
+    if (content.trim() === "") {
+      newErrors.content = 'Please Enter Content';
+      valid = false;
+    }
+
+    setInputError(newErrors);
+    return valid;
+  }
+
   return (
     <div className='py-10 px-3 max-w-3xl mx-auto min-h-screen'>
       <div className='text-center text-3xl mb-7 font-semobold'>Create a Post</div>
-      <form className='flex flex-col gap-4'>
+      {
+        publishError && <Alert color="failute">{publishError}</Alert>
+      }
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
-          <TextInput type="text" placeholder='Title' required id="title" className='flex-1' />
-          <Select>
+          <div className='flex-1'>
+            <TextInput
+              type="text"
+              placeholder='Title*'
+              id="title"
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            />
+            {inputError.title && <span className="text-red-600 text-sm">{inputError.title}</span>}
+          </div>
+          <Select
+            id="category"
+            onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          >
             <option value="uncategorized">Select a Category</option>
             <option value="javascript">Javascript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
           </Select>
         </div>
-        <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
-          <FileInput type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} />
+        <div className='flex gap-4 items-center justify-between border p-3'>
+          <FileInput id="image" type="file" accept="image/*" onChange={(e) => setFile(e.target.files[0])} />
           {
-            formData.profilePicture && (
-              <Link className="font-medium text-blue-600" to={formData.profilePicture} target='_blank'>View Image</Link>
+            formData.image && (
+              <Link className="font-medium text-blue-600" to={formData.image} target='_blank'>View Image</Link>
             )
           }
           <Button type="button" gradientDuoTone="purpleToBlue" size="sm" outline onClick={handleUploadImage}>
@@ -84,7 +163,17 @@ const Createpost = () => {
             <Alert color='failure'>{imageUploadError}</Alert>
           )
         }
-        <ReactQuill theme="snow" placeholder='Write Something...' className='h-72 mb-12' required />
+        <div>
+          <ReactQuill
+            id="content"
+            theme="snow"
+            placeholder='Write Something...*'
+            onChange={(value) => setFormData({ ...formData, content: value })}
+            className="quill-custom"
+          />
+          {inputError.content && <span className="text-red-600 text-sm">{inputError.content}</span>}
+        </div>
+
         <Button type="submit" gradientDuoTone="purpleToPink">Publish</Button>
 
 

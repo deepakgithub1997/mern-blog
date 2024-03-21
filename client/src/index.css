@@ -18,3 +18,15 @@ body {
 .dark .ql-editor.ql-blank::before {
   color: #ccc;
 }
+
+.quill-custom .ql-container {
+  height: 250px;
+}
+
+.quill-error {
+  border: 1px solid rgb(240 82 82 / 1);
+}
+
+.dark .quill-error {
+  border: 1px solid rgb(240 82 82 / 1);
+}

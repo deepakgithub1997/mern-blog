@@ -3,13 +3,12 @@ import { errorHandler } from '../utils/error.js';
 import { createSlug } from '../utils/create-slug.js';
 
 export const create = async (req, res, next) => {
-  const { title, content } = req.body;
-
-  if (!req.user.isAdmin) {
-    return next(errorHandler(403, 'You are not allowed to create a post'));
+  const { title } = req.body;
+  if (req.user.isAdmin) {
+    return next(errorHandler(200, 'You are not allowed to create a post'));
   }
   if (!req.body.title || !req.body.content) {
-    return next(errorHandler(400, 'Please provide all required fileds'));
+    return next(errorHandler(200, 'Please provide all required fileds'));
   }
   try {
     const validTitle = await Post.findOne({ title });
