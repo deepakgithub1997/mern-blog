@@ -32,7 +32,7 @@ const DashSidebar = () => {
     }
   }
   return (
-    <Sidebar className='w-full md:w-56'>
+    <Sidebar className='min-h-full w-full md:w-56'>
       <Sidebar.Items className='md:min-h-screen'>
         <Sidebar.ItemGroup className='flex flex-col flex-1'>
           <Link to="/dashboard/?tab=profile">
@@ -48,7 +48,7 @@ const DashSidebar = () => {
             </Link>
           )}
           <Sidebar.Item icon={HiArrowSmRight} onClick={handleSignOut}>
-            SignOut
+            Signout
           </Sidebar.Item>
         </Sidebar.ItemGroup>
       </Sidebar.Items>

@@ -140,83 +140,85 @@ const DashProfile = () => {
   }
 
   return (
-    <div className='max-w-lg mx-auto p-3 w-full'>
-      <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input type='file' accept="image/*" onChange={handleImageChange} ref={filePickerRef} hidden />
-        <div className='w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full relative' onClick={() => { filePickerRef.current.click() }}>
-          {imageFileUploading ? <>
-            {imageFileupLoadingProgress && <CircularProgressbar value={imageFileupLoadingProgress || 0} text={`${imageFileupLoadingProgress}%`} strokeWidth={5} styles={{
-              root: {
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-              },
-              path: {
-                stroke: `rgba(62,152, 199, ${imageFileupLoadingProgress / 100})`,
-              }
-            }} />}
-          </> : null}
-          <img src={imageFileUrl ? imageFileUrl : currentUser.profilePicture} alt="User" className='rounded-full h-full w-full object-cover border-8 border-[lightgray]' />
+    <div className='w-lg mx-auto p-3 w-full'>
+      <div className="max-w-lg mx-auto">
+        <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
+        <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
+          <input type='file' accept="image/*" onChange={handleImageChange} ref={filePickerRef} hidden />
+          <div className='w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full relative' onClick={() => { filePickerRef.current.click() }}>
+            {imageFileUploading ? <>
+              {imageFileupLoadingProgress && <CircularProgressbar value={imageFileupLoadingProgress || 0} text={`${imageFileupLoadingProgress}%`} strokeWidth={5} styles={{
+                root: {
+                  width: '100%',
+                  height: '100%',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                },
+                path: {
+                  stroke: `rgba(62,152, 199, ${imageFileupLoadingProgress / 100})`,
+                }
+              }} />}
+            </> : null}
+            <img src={imageFileUrl ? imageFileUrl : currentUser.profilePicture} alt="User" className='rounded-full h-full w-full object-cover border-8 border-[lightgray]' />
+          </div>
+          {
+            imageFileupLoadingError && <Alert color='failure'>{imageFileupLoadingError}</Alert>
+          }
+          <TextInput type='text' id="username" placeholder='username' defaultValue={currentUser.username} onChange={handleChange} />
+          <TextInput type='email' id="email" placeholder='email' defaultValue={currentUser.email} onChange={handleChange} />
+          <TextInput type='password' id="password" placeholder='password' defaultValue={currentUser.password} onChange={handleChange} />
+          <Button type="submit" outline gradientDuoTone="purpleToBlue" disabled={loading || imageFileUploading}>
+            {loading ? "Loading.." : "Update"}
+          </Button>
+        </form>
+
+        {currentUser.isAdmin && (
+          <Link to="/createpost"><Button gradientDuoTone='purpleToPink' className='w-full mt-4'>Create Post</Button></Link>
+        )
+        }
+
+        <div className='text-red-500 flex justify-between mt-3'>
+          <span className='cursor-pointer' onClick={() => setShowModal(true)}>Delete Account</span>
+          <span onClick={handleSignOut} className='cursor-pointer'>SignOut</span>
         </div>
         {
-          imageFileupLoadingError && <Alert color='failure'>{imageFileupLoadingError}</Alert>
+          updateuserSuccess && (
+            <Alert color="success" className="mt-5">
+              {updateuserSuccess}
+            </Alert>
+          )
         }
-        <TextInput type='text' id="username" placeholder='username' defaultValue={currentUser.username} onChange={handleChange} />
-        <TextInput type='email' id="email" placeholder='email' defaultValue={currentUser.email} onChange={handleChange} />
-        <TextInput type='password' id="password" placeholder='password' defaultValue={currentUser.password} onChange={handleChange} />
-        <Button type="submit" outline gradientDuoTone="purpleToBlue" disabled={loading || imageFileUploading}>
-          {loading ? "Loading.." : "Update"}
-        </Button>
-      </form>
-
-      {currentUser.isAdmin && (
-        <Link to="/createpost"><Button gradientDuoTone='purpleToPink' className='w-full mt-4'>Create Post</Button></Link>
-      )
-      }
-
-      <div className='text-red-500 flex justify-between mt-3'>
-        <span className='cursor-pointer' onClick={() => setShowModal(true)}>Delete Account</span>
-        <span onClick={handleSignOut} className='cursor-pointer'>SignOut</span>
-      </div>
-      {
-        updateuserSuccess && (
-          <Alert color="success" className="mt-5">
-            {updateuserSuccess}
-          </Alert>
-        )
-      }
-      {
-        updateuserError && (
-          <Alert color="failure" className="mt-5">
-            {updateuserError}
-          </Alert>
-        )
-      }
-      {
-        error && (
-          <Alert color="failure" className="mt-5">
-            {error}
-          </Alert>
-        )
-      }
-      <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
-        <Modal.Header />
-        <Modal.Body>
-          <div className="text-center">
-            <HiOutlineExclamationCircle className="h-14 w-14 terxt-gray-400 dark:text-gray-200 mb-4 mx-auto"></HiOutlineExclamationCircle>
-            <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
-              Are you Sure you want to delete the account?
-            </h3>
-            <div className='flex justify-center gap-4'>
-              <Button color="failure" onClick={handleDeleteuser}>Yes I'm Sure</Button>
-              <Button color="gray" onClick={() => setShowModal(false)}>No, Cancel</Button>
+        {
+          updateuserError && (
+            <Alert color="failure" className="mt-5">
+              {updateuserError}
+            </Alert>
+          )
+        }
+        {
+          error && (
+            <Alert color="failure" className="mt-5">
+              {error}
+            </Alert>
+          )
+        }
+        <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
+          <Modal.Header />
+          <Modal.Body>
+            <div className="text-center">
+              <HiOutlineExclamationCircle className="h-14 w-14 terxt-gray-400 dark:text-gray-200 mb-4 mx-auto"></HiOutlineExclamationCircle>
+              <h3 className='mb-5 text-lg text-gray-500 dark:text-gray-400'>
+                Are you Sure you want to delete the account?
+              </h3>
+              <div className='flex justify-center gap-4'>
+                <Button color="failure" onClick={handleDeleteuser}>Yes I'm Sure</Button>
+                <Button color="gray" onClick={() => setShowModal(false)}>No, Cancel</Button>
+              </div>
             </div>
-          </div>
-        </Modal.Body>
-      </Modal>
+          </Modal.Body>
+        </Modal>
+      </div>
     </div>
   )
 }
