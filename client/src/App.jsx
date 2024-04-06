@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRoute';
 import PrivateRouteAdmin from './components/PrivateRouteAdmin';
 import PublicRoute from './components/PublicRoute';
 import Createpost from './pages/Createpost';
+import Updatepost from './pages/Updatepost';
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
         {/* if admin and login */}
         <Route element={<PrivateRouteAdmin />}>
           <Route path="/createpost" element={<Createpost />} />
+          <Route path="/updatepost/:postId" element={<Updatepost />} />
           <Route path="/dashboard/?tab=posts" element={<Dashboard />} />
         </Route>
       </Routes>

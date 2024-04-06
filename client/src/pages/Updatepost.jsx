@@ -1,27 +1,50 @@
 import { ref, getStorage, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase';
 import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const Createpost = () => {
+const Updatepost = () => {
   const navigate = useNavigate();
+  const { postId } = useParams();
+  const { currentUser } = useSelector(state => state.user);
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
+  const [publishError, setPublishError] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     category: "",
     image: "",
     content: "",
   });
-  const [publishError, setPublishError] = useState(null);
+
+  useEffect(() => {
+    try {
+      const fetchPost = async () => {
+        const res = await fetch(`/api/post/getposts?postId=${postId}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          setPublishError(data.message);
+          return;
+        }
+        if (res.ok) {
+          setPublishError(null);
+          setFormData(data.posts[0]);
+        }
+      }
+      fetchPost();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [postId]);
 
   const handleUploadImage = async () => {
     try {
@@ -57,35 +80,10 @@ const Createpost = () => {
     }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        const res = await fetch('/api/post/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-        const data = await res.json();
-        if (!res.ok) {
-          setPublishError(data.message);
-          return;
-        }
-        if (res.ok) {
-          setPublishError(null);
-          navigate(`/post/${data.slug}`);
-        }
-      }
-      catch (error) {
-        console.log(error);
-      }
-    }
-  }
-
   const [inputError, setInputError] = useState({});
   const validateForm = () => {
     let valid = true;
-    const { title, category, image, content } = formData;
+    const { title, image, content } = formData;
     const newErrors = {
       title: "",
       category: "",
@@ -96,10 +94,7 @@ const Createpost = () => {
       newErrors.title = 'Please Enter Title';
       valid = false;
     }
-    // if (content.trim().length < 100) {
-    //   newErrors.content = 'Please Enter more than 100 Characters';
-    //   valid = false;
-    // }
+
     if (image.trim() === "") {
       newErrors.image = 'Please upload Image';
       valid = false;
@@ -113,9 +108,35 @@ const Createpost = () => {
     return valid;
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      } else {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+
+    } catch (error) {
+      setPublishError('Something went wrong');
+    }
+
+  }
+
   return (
     <div className='py-10 px-3 max-w-3xl mx-auto min-h-screen'>
-      <div className='text-center text-3xl mb-7 font-semobold'>Create a Post</div>
+      <div className='text-center text-3xl mb-7 font-semobold'>Update a Post {formData._id}</div>
       {
         publishError && <Alert color="failute">{publishError}</Alert>
       }
@@ -126,15 +147,17 @@ const Createpost = () => {
               type="text"
               placeholder='Title*'
               id="title"
+              value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
             {inputError.title && <span className="text-red-600 text-sm">{inputError.title}</span>}
           </div>
           <Select
             id="category"
+            value={formData.category}
             onChange={(e) => setFormData({ ...formData, category: e.target.value })}
           >
-            <option value="">Select a Category</option>
+            <option value="" defaultValue>Select a Category</option>
             <option value="javascript">Javascript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
@@ -166,6 +189,7 @@ const Createpost = () => {
         <div>
           <ReactQuill
             id="content"
+            value={formData.content}
             theme="snow"
             placeholder='Write Something...*'
             className="quill-custom"
@@ -174,12 +198,10 @@ const Createpost = () => {
           {inputError.content && <span className="text-red-600 text-sm">{inputError.content}</span>}
         </div>
 
-        <Button type="submit" gradientDuoTone="purpleToPink">Publish</Button>
-
-
+        <Button type="submit" gradientDuoTone="purpleToPink">Update Post</Button>
       </form>
     </div>
   )
 }
 
-export default Createpost
+export default Updatepost
