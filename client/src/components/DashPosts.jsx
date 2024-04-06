@@ -70,7 +70,7 @@ const DashPosts = () => {
   return (
     <div className='table-auto overflow-x-auto md:mx-auto p-3 scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 '>
       {currentUser.isAdmin && (
-        <Link to="/createpost"><Button gradientDuoTone='purpleToPink' className='mb-4'>Create Post &nbsp;<FaRegSquarePlus /></Button></Link>
+        <Link to="/createpost" className='mb-4 inline-block w-auto'><Button gradientDuoTone='purpleToPink' >Create Post &nbsp;<FaRegSquarePlus /></Button></Link>
       )
       }
       {

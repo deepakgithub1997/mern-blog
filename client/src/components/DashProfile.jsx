@@ -172,12 +172,6 @@ const DashProfile = () => {
             {loading ? "Loading.." : "Update"}
           </Button>
         </form>
-
-        {currentUser.isAdmin && (
-          <Link to="/createpost"><Button gradientDuoTone='purpleToPink' className='w-full mt-4'>Create Post</Button></Link>
-        )
-        }
-
         <div className='text-red-500 flex justify-between mt-3'>
           <span className='cursor-pointer' onClick={() => setShowModal(true)}>Delete Account</span>
           <span onClick={handleSignOut} className='cursor-pointer'>SignOut</span>
