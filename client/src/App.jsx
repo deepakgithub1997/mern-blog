@@ -36,6 +36,7 @@ const App = () => {
           <Route path="/createpost" element={<Createpost />} />
           <Route path="/updatepost/:postId" element={<Updatepost />} />
           <Route path="/dashboard/?tab=posts" element={<Dashboard />} />
+          <Route path="/dashboard/?tab=users" element={<Dashboard />} />
         </Route>
       </Routes>
       <Footers />

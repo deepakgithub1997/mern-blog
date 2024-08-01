@@ -96,10 +96,10 @@ const Createpost = () => {
       newErrors.title = 'Please Enter Title';
       valid = false;
     }
-    // if (content.trim().length < 100) {
-    //   newErrors.content = 'Please Enter more than 100 Characters';
-    //   valid = false;
-    // }
+    if (content.trim().length < 100) {
+      newErrors.content = 'Please Enter more than 100 Characters';
+      valid = false;
+    }
     if (image.trim() === "") {
       newErrors.image = 'Please upload Image';
       valid = false;
@@ -158,6 +158,7 @@ const Createpost = () => {
               )}
           </Button>
         </div>
+        {inputError.image && <span className="text-red-600 text-sm">{inputError.image}</span>}
         {
           imageUploadError && (
             <Alert color='failure'>{imageUploadError}</Alert>

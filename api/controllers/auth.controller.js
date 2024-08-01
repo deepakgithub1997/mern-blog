@@ -5,35 +5,38 @@ import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
+
+  console.log(username + " , " + email + " , " + password);
+
   if (!username || !email || !password || username === "" || password === "" || email === "") {
-    next((200, "All Fields Are Required"));
+    next((200, "All Fields Are Required (Server Error)"));
   }
   if (password) {
     if (password.length < 6) {
-      return next(errorHandler(400, 'Password must be at least 6 Characters'));
+      return next(errorHandler(400, 'Password must be at least 6 Characters (Server Error)'));
     }
   }
 
   if (username) {
-    if (username.length < 7 || username.length > 20) {
-      return next(errorHandler(400, 'username must be of 7 to 20 Characters'));
+    if (username.length < 3 || username.length > 20) {
+      return next(errorHandler(400, 'username must be of 7 to 20 Characters (Server Error)'));
     }
     if (username.includes(" ")) {
-      return next(errorHandler(400, 'username cannot contains spaces'));
+      return next(errorHandler(400, 'username cannot contains spaces (Server Error)'));
     }
     if (!username.match(/^[a-zA-Z0-9]+$/)) {
-      return next(errorHandler(400, 'Username can only contains letter and numbers'));
+      return next(errorHandler(400, 'Username can only contains letter and numbers (Server Error)'));
     }
   }
   const hashpassword = bcryptjs.hashSync(password, 10);
   try {
     const validUser = await User.findOne({ username });
     if (validUser) {
-      return next(errorHandler(200, "username already used"));
+      return next(errorHandler(200, "username already used (Server Error)"));
     }
     const validEmail = await User.findOne({ email });
     if (validEmail) {
-      return next(errorHandler(200, "email already used"));
+      return next(errorHandler(200, "email already used (Server Error)"));
     }
   } catch (error) {
     return next(error);

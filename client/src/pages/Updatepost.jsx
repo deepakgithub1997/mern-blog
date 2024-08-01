@@ -80,7 +80,37 @@ const Updatepost = () => {
     }
   }
 
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          setPublishError(data.message);
+          return;
+        } else {
+          setPublishError(null);
+          navigate(`/post/${data.slug}`);
+        }
+
+      } catch (error) {
+        setPublishError('Something went wrong');
+      }
+    }
+  }
+
   const [inputError, setInputError] = useState({});
+
   const validateForm = () => {
     let valid = true;
     const { title, image, content } = formData;
@@ -90,6 +120,7 @@ const Updatepost = () => {
       image: "",
       content: "",
     };
+
     if (title.trim() === "") {
       newErrors.title = 'Please Enter Title';
       valid = false;
@@ -99,6 +130,7 @@ const Updatepost = () => {
       newErrors.image = 'Please upload Image';
       valid = false;
     }
+
     if (content.trim() === "") {
       newErrors.content = 'Please Enter Content';
       valid = false;
@@ -108,35 +140,9 @@ const Updatepost = () => {
     return valid;
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setPublishError(data.message);
-        return;
-      } else {
-        setPublishError(null);
-        navigate(`/post/${data.slug}`);
-      }
-
-    } catch (error) {
-      setPublishError('Something went wrong');
-    }
-
-  }
-
   return (
     <div className='py-10 px-3 max-w-3xl mx-auto min-h-screen'>
-      <div className='text-center text-3xl mb-7 font-semobold'>Update a Post {formData._id}</div>
+      <div className='text-center text-3xl mb-7 font-semobold'>Update a Post </div>
       {
         publishError && <Alert color="failute">{publishError}</Alert>
       }

@@ -59,15 +59,15 @@ const Signup = () => {
       password: "",
     };
     if (username.trim() === '') {
-      newErrors.username = 'Please Enter Username';
+      newErrors.username = 'Please Enter Username (Client error)';
       valid = false;
     }
     if (email.trim() === '') {
-      newErrors.email = 'Please Enter Email';
+      newErrors.email = 'Please Enter Email (Client error)';
       valid = false;
     }
     if (password.trim() === '') {
-      newErrors.password = 'Please Enter Password';
+      newErrors.password = 'Please Enter Password (Client error)';
       valid = false;
     }
 
