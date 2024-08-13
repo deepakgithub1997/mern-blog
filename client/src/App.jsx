@@ -12,6 +12,7 @@ import PrivateRouteAdmin from './components/PrivateRouteAdmin';
 import PublicRoute from './components/PublicRoute';
 import Createpost from './pages/Createpost';
 import Updatepost from './pages/Updatepost';
+import PostPage from './pages/PostPage';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/post/:postSlug" element={<PostPage />} />
 
         {/* if no login  */}
         <Route element={<PublicRoute />}>
