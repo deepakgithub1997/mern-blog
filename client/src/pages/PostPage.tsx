@@ -2,8 +2,10 @@ import React, { FC, useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Spinner } from 'flowbite-react';
 import CallAction from '../components/CallAction';
+import CommentSection from '../components/CommentSection';
 
 interface Post {
+  _id: String;
   title: string;
   category: string;
   image: string;
@@ -49,10 +51,10 @@ const PostPage: FC = () => {
 
   return (
     <main className="p-3 flex flex-col max-w-6xl mx-auto min-h-screen">
-      <img src={post?.image} alt={post?.title} className="mt-10 p-3 max-h-[600px] w-full object-cover" />
       <h1 className="text-3xl mt-10 p-3 text-center font-serif max-w-2xl mx-auto lg:text-4xl">
         {post?.title}
       </h1>
+      <img src={post?.image} alt={post?.title} className="mt-10 p-3 max-h-[600px] w-full object-cover" />
       <Link to={`/search?category=${post?.category}`} className="self-center mt-5">
         <Button color="gray" pill size="xs">{post?.category}</Button>
       </Link>
@@ -63,6 +65,7 @@ const PostPage: FC = () => {
       <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: post?.content! }} />
       <div className="max-w-4xl mx-auto w-full">
         <CallAction />
+        <CommentSection postId={post && post._id} />
       </div>
     </main>
   );
