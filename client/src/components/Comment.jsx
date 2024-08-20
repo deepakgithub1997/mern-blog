@@ -1,13 +1,15 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux'
+import { FaThumbsUp } from 'react-icons/fa';
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, onLike }) => {
   const [user, setUser] = useState({});
+  const { currentUser } = useSelector(state => state.user);
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        console.log(comment);
         const res = await fetch(`/api/user/${comment.userId}`);
         const data = await res.json();
         if (res.ok) {
@@ -19,6 +21,7 @@ const Comment = ({ comment }) => {
     }
     getUser();
   }, [comment]);
+
 
   return (
     <div>
@@ -40,10 +43,12 @@ const Comment = ({ comment }) => {
           </div>
           <div className="flex justify-between items-center">
             <div className="flex justify-start pt-2 text-xs border-t dark:border-gray-700 max-w-fit gap-2">
-              <button type="button" className="text-gray-400 hover:text-blue-500 flex items-center">
-                {comment.numberOfLikes} Like
+              <button type="button" onClick={() => onLike(comment._id)}
+                className={`text-gray-400 hover:text-blue-500 flex items-center 
+                ${currentUser && comment.likes.includes(currentUser._id) && '!text-blue-500'}`}>
+                <FaThumbsUp className='text-sm'></FaThumbsUp>
               </button>
-              <p className="text-gray-400 "></p>
+              <p className="text-gray-500">{comment.numberOfLikes > 0 && comment.numberOfLikes + " " + (comment.numberOfLikes === 1 ? "Like" : "Likes")} </p>
             </div>
           </div>
         </div>
