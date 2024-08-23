@@ -48,7 +48,6 @@ export const deleteUser = async (req, res, next) => {
     return next(errorHandler(403, 'Your are not allowed to delete this user'));
   }
   try {
-    console.log(req.params.userId);
     await User.findByIdAndDelete(req.params.userId);
     res.status(200).json('User has been deleted');
   } catch (error) {
@@ -110,10 +109,9 @@ export const getUsers = async (req, res, next) => {
 
 export const getUser = async (req, res, next) => {
   try {
-    console.log(req.params.userId);
     const user = await User.findById(req.params.userId);
     if (!user) {
-      return next(errorHandler('404', 'User not found'));
+      return next(errorHandler(404, 'User not found'));
     }
     const { password, ...rest } = user._doc;
     res.status(200).json(rest);

@@ -5,10 +5,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import Comment from './Comment';
 
 export default function CommentSection({ postId }) {
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState('');
   const [commentError, setCommentError] = useState(null);
-  const [commentslist, setCommentslist] = useState([]);
+  const [comments, setComments] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -30,12 +30,12 @@ export default function CommentSection({ postId }) {
       if (res.ok) {
         setComment('');
         setCommentError(null);
-        // setCommentslist([data, ...commentslist]);
+        setComments([data, ...comments]);
       }
     } catch (error) {
       setCommentError(error.message);
     }
-  }
+  };
 
   useEffect(() => {
     const getComments = async () => {
@@ -43,14 +43,14 @@ export default function CommentSection({ postId }) {
         const res = await fetch(`/api/comment/getPostComments/${postId}`);
         if (res.ok) {
           const data = await res.json();
-          setCommentslist(data);
+          setComments(data);
         }
       } catch (error) {
         console.log(error.message);
       }
-    }
+    };
     getComments();
-  }, [postId, commentslist]);
+  }, [postId]);
 
   const handleLike = async (commentId) => {
     try {
@@ -59,23 +59,30 @@ export default function CommentSection({ postId }) {
         return;
       }
       const res = await fetch(`/api/comment/likeComment/${commentId}`, {
-        method: 'PUT'
+        method: 'PUT',
       });
 
       if (res.ok) {
         const data = await res.json();
 
-        setCommentslist(commentslist.map((comment) =>
+        setComments(comments.map((comment) =>
           comment._id === commentId ? {
             ...comment,
             like: data.likes,
             numberOflikes: data.likes.length,
           } : comment
-        ))
+        ));
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
+  }
+
+  const handleEdit = async (comment, editContent) => {
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id ? { ...c, content: editContent } : c)
+    )
   }
 
   return (
@@ -117,19 +124,19 @@ export default function CommentSection({ postId }) {
         )
       }
       {
-        commentslist.length == 0 ? (
+        comments.length == 0 ? (
           <p className="text-sm my-5">No Comments yet!</p>
         ) : (
           <>
             <div className='text-sm my-5 flex items-center gap-1'>
               <p>Comments:</p>
               <div className="border border-gray-500 py-1 px-2 rounded-sm">
-                <p>{commentslist.length}</p>
+                <p>{comments.length}</p>
               </div>
             </div>
             {
-              commentslist.map((comments, index) => (
-                <Comment key={index} comment={comments} onLike={handleLike} />
+              comments.map((comment, index) => (
+                <Comment key={index} comment={comment} onLike={handleLike} onEdit={handleEdit} />
               ))
             }
           </>
