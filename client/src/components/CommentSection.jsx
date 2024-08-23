@@ -68,8 +68,8 @@ export default function CommentSection({ postId }) {
         setComments(comments.map((comment) =>
           comment._id === commentId ? {
             ...comment,
-            like: data.likes,
-            numberOflikes: data.likes.length,
+            likes: data.likes,
+            numberOfLikes: data.likes.length,
           } : comment
         ));
       }
