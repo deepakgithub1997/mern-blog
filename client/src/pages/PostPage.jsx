@@ -1,26 +1,19 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Spinner } from 'flowbite-react';
 import CallAction from '../components/CallAction';
 import CommentSection from '../components/CommentSection';
+import PostCard from '../components/PostCard';
 
-interface Post {
-  _id: String;
-  title: string;
-  category: string;
-  image: string;
-  createdAt: string;
-  content: string;
-}
-
-const PostPage: FC = () => {
-  const { postSlug } = useParams<{ postSlug: string }>();
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<boolean>(false);
-  const [post, setPost] = useState<Post | null>(null);
+const PostPage = () => {
+  const { postSlug } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [post, setPost] = useState(null);
+  const [recentPosts, setRecentPost] = useState(null);
 
   useEffect(() => {
-    const fetchPost = async (): Promise<void> => {
+    const fetchPost = async () => {
       try {
         setLoading(true);
         const res = await fetch(`/api/post/getposts?slug=${postSlug}`);
@@ -43,6 +36,21 @@ const PostPage: FC = () => {
     fetchPost();
   }, [postSlug]);
 
+  useEffect(() => {
+    try {
+      const fetchRecentPost = async () => {
+        const res = await fetch(`/api/post/getposts?limit=3`);
+        const data = await res.json();
+        if (res.ok) {
+          setRecentPost(data.posts);
+        }
+      }
+      fetchRecentPost();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   if (loading) return (
     <div className='flex justify-center items-center min-h-screen'>
       <Spinner size="xl" />
@@ -62,10 +70,20 @@ const PostPage: FC = () => {
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
         <span className="italic">{post && (post.content.length / 1000).toFixed(0)} mins read</span>
       </div>
-      <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: post?.content! }} />
+      <div className="p-3 max-w-2xl mx-auto w-full post-content" dangerouslySetInnerHTML={{ __html: post.content }} />
       <div className="max-w-4xl mx-auto w-full">
         <CallAction />
         <CommentSection postId={post && post._id} />
+
+      </div>
+      <div className='flex flex-col jusify-center items-center mb-5'>
+        <h2 className="text-xl mb-5 mt-5">Recent Articles</h2>
+        <div className="flex flex-wrap justify-center gap-5 mt-5 ">
+          {
+            recentPosts &&
+            recentPosts.map((post) => <PostCard key={post._id} post={post} />)
+          }
+        </div>
       </div>
     </main>
   );
