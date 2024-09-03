@@ -34,13 +34,17 @@ const App = () => {
         {/* if login */}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/?tab=posts" element={<Dashboard />} />
+          <Route path="/dashboard/?tab=users" element={<Dashboard />} />
+          <Route path="/dashboard/?tab=comments" element={<Dashboard />} />
+          <Route path="/dashboard/?tab=dash" element={<Dashboard />} />
         </Route>
         {/* if admin and login */}
         <Route element={<PrivateRouteAdmin />}>
           <Route path="/createpost" element={<Createpost />} />
           <Route path="/updatepost/:postId" element={<Updatepost />} />
-          <Route path="/dashboard/?tab=posts" element={<Dashboard />} />
-          <Route path="/dashboard/?tab=users" element={<Dashboard />} />
+
+
         </Route>
       </Routes>
       <Footers />
