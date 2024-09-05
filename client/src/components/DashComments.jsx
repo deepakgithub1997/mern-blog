@@ -96,7 +96,7 @@ const DashComments = () => {
               </Table.Body>
             </Table>
             {
-              showMore && <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7">Show More</button>
+              showMore && <button onClick={handleShowMore} className="w-full text-teal-500 self-center text-sm py-7"></button>
             }
             <Modal show={showModal} onClose={() => setShowModal(false)} popup size="md">
               <Modal.Header />

@@ -21,11 +21,12 @@ const Dashboard = () => {
   return (
     <div className='block md:flex'>
       <DashSidebar />
+      {tab === "" && <DashBoard />}
+      {tab === "dash" && <DashBoard />}
       {tab === "profile" && <DashProfile />}
       {tab === "posts" && <DashPosts />}
       {tab === "users" && <DashUsers />}
       {tab === "comments" && <DashComments />}
-      {tab === "dash" && <DashBoard />}
     </div>
   )
 }

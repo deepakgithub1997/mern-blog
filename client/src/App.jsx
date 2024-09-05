@@ -14,6 +14,7 @@ import Createpost from './pages/Createpost';
 import Updatepost from './pages/Updatepost';
 import PostPage from './pages/PostPage';
 import ScrollToTop from './components/ScrollToTop';
+import Search from './pages/Search';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/post/:postSlug" element={<PostPage />} />
+        <Route path="/search" element={<Search />} />
 
         {/* if no login  */}
         <Route element={<PublicRoute />}>
@@ -43,8 +45,6 @@ const App = () => {
         <Route element={<PrivateRouteAdmin />}>
           <Route path="/createpost" element={<Createpost />} />
           <Route path="/updatepost/:postId" element={<Updatepost />} />
-
-
         </Route>
       </Routes>
       <Footers />
