@@ -40,6 +40,7 @@ const App = () => {
           <Route path="/dashboard/?tab=users" element={<Dashboard />} />
           <Route path="/dashboard/?tab=comments" element={<Dashboard />} />
           <Route path="/dashboard/?tab=dash" element={<Dashboard />} />
+          <Route path="/dashboard/?tab=chat" element={<Dashboard />} />
         </Route>
         {/* if admin and login */}
         <Route element={<PrivateRouteAdmin />}>

@@ -1,6 +1,6 @@
 import { Sidebar } from 'flowbite-react';
 import { useEffect, useState } from 'react';
-import { HiUser, HiDocumentText, HiArrowSmRight, HiUsers, HiChartPie, HiAtSymbol } from 'react-icons/hi';
+import { HiUser, HiDocumentText, HiArrowSmRight, HiUsers, HiChartPie, HiAtSymbol, HiChatAlt2 } from 'react-icons/hi';
 import { FaComments } from "react-icons/fa";
 import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,8 +33,8 @@ const DashSidebar = () => {
     }
   }
   return (
-    <Sidebar className='min-w-[250px] min-h-full w-full md:w-56'>
-      <Sidebar.Items className='md:min-h-screen'>
+    <Sidebar className='min-w-[250px] h-[510px] w-full md:w-56'>
+      <Sidebar.Items >
         <Sidebar.ItemGroup className='flex flex-col flex-1'>
           {currentUser && currentUser.isAdmin && (
             <Link to="/dashboard/?tab=dash">
@@ -56,6 +56,11 @@ const DashSidebar = () => {
               </Sidebar.Item>
             </Link>
           )}
+          <Link to="/dashboard/?tab=chat">
+            <Sidebar.Item active={tab === 'chat'} icon={HiChatAlt2} as='div'>
+              Chats
+            </Sidebar.Item>
+          </Link>
           {currentUser.isAdmin && (
             <Link to="/dashboard/?tab=comments">
               <Sidebar.Item active={tab === 'comments'} icon={HiAtSymbol} as='div'>

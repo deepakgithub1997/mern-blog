@@ -76,3 +76,69 @@ body {
   height: 100px;
   background-color: #f3f3f3;
 }
+
+
+/* Add this in your global CSS file */
+.customscroll::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
+  transition: 0.4s;
+}
+
+.customscroll::-webkit-scrollbar-thumb {
+  background-color: #fff0;
+}
+
+.customscroll:hover::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+  /* Example: Tailwind's Gray 600 */
+  border-radius: 4px;
+}
+
+.customscroll::-webkit-scrollbar-track {
+  background-color: #fff0;
+  /* Example: Tailwind's Gray 200 */
+}
+
+.messagesent {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.messagereceived {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+.messagecard {
+  display: flex;
+  align-items: stretch;
+  flex-direction: row;
+  gap: 7px;
+}
+
+.messagereceived .messagecard {
+  flex-direction: row-reverse;
+}
+
+.messagesent .chatbubble {
+  border-radius: 10px 10px 10px 0px;
+}
+
+.messagereceived .chatbubble {
+  border-radius: 10px 10px 0px 10px;
+}
+
+.messagereceived .time {
+  text-align: right;
+}
+
+.messagesent .chatbubble {
+  background: #6875F5;
+}
+
+.messagereceived .chatbubble {
+  background: #9061F9;
+}
