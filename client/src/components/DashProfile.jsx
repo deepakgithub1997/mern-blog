@@ -1,4 +1,4 @@
-import { Alert, Button, Modal, TextInput } from 'flowbite-react';
+import { Alert, Button, Modal, TextInput, Radio, Label } from 'flowbite-react';
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { ref, getDownloadURL, getStorage, uploadBytesResumable } from 'firebase/storage';
@@ -68,6 +68,10 @@ const DashProfile = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  const handleRadioChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -164,9 +168,27 @@ const DashProfile = () => {
           {
             imageFileupLoadingError && <Alert color='failure'>{imageFileupLoadingError}</Alert>
           }
+          <TextInput type='text' id="fullname" placeholder='full name' defaultValue={currentUser.fullname} onChange={handleChange} />
           <TextInput type='text' id="username" placeholder='username' defaultValue={currentUser.username} onChange={handleChange} />
           <TextInput type='email' id="email" placeholder='email' defaultValue={currentUser.email} onChange={handleChange} />
           <TextInput type='password' id="password" placeholder='password' defaultValue={currentUser.password} onChange={handleChange} />
+
+          <fieldset className="flex max-w-md flex-wrap gap-4">
+            <legend className="mb-4">Select Gender</legend>
+            <div className="flex items-center gap-2">
+              <Radio id="male" name="gender" value="Male" onChange={handleRadioChange} defaultChecked={currentUser.gender === "Male"} />
+              <Label htmlFor="male">Male</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Radio id="female" name="gender" value="Female" onChange={handleRadioChange} defaultChecked={currentUser.gender === "Female"} />
+              <Label htmlFor="female">Female</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <Radio id="nonbinary" name="gender" value="Non-binary" onChange={handleRadioChange} defaultChecked={currentUser.gender === "Non-binary"} />
+              <Label htmlFor="nonbinary">Non-binary</Label>
+            </div>
+          </fieldset>
+
           <Button type="submit" outline gradientDuoTone="purpleToBlue" disabled={loading || imageFileUploading}>
             {loading ? "Loading.." : "Update"}
           </Button>

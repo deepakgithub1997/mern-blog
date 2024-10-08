@@ -8,6 +8,7 @@ import OAuth from '../elements/OAuth';
 const Signup = () => {
 
   const [formData, setformData] = useState({
+    fullname: "",
     username: "",
     email: "",
     password: ""
@@ -52,12 +53,17 @@ const Signup = () => {
 
   const validateForm = () => {
     let valid = true;
-    const { username, email, password } = formData;
+    const { fullname, username, email, password } = formData;
     const newErrors = {
+      fullname: "",
       username: "",
       email: "",
       password: "",
     };
+    if (fullname.trim() === '') {
+      newErrors.fullname = 'Please Enter Fullname (Client error)';
+      valid = false;
+    }
     if (username.trim() === '') {
       newErrors.username = 'Please Enter Username (Client error)';
       valid = false;
@@ -92,6 +98,11 @@ const Signup = () => {
             )
           }
           <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+            <div className="">
+              <Label value="Your Full Name" />
+              <TextInput type='text' placeholder='fullname' id="fullname" onChange={inputHandler} />
+              {errors.fullname && <span className="text-red-600 text-sm">{errors.fullname}</span>}
+            </div>
             <div className="">
               <Label value="Your Username" />
               <TextInput type='text' placeholder='username' id="username" onChange={inputHandler} />

@@ -76,6 +76,7 @@ const DashUsers = () => {
             <Table.Head>
               <Table.HeadCell>Date Updated</Table.HeadCell>
               <Table.HeadCell>Profile Pic</Table.HeadCell>
+              <Table.HeadCell>Full Name</Table.HeadCell>
               <Table.HeadCell>User Name</Table.HeadCell>
               <Table.HeadCell>Email</Table.HeadCell>
               <Table.HeadCell>Admin</Table.HeadCell>
@@ -89,7 +90,8 @@ const DashUsers = () => {
                     <Table.Cell>
                       <img src={user.profilePicture} className="rounded-full w-20" alt={user.username} />
                     </Table.Cell>
-                    <Table.Cell><p className="whitespace-nowrap w-80 text-ellipsis overflow-hidden">{user.username}</p></Table.Cell>
+                    <Table.Cell><p className="whitespace-nowrap w-30 text-ellipsis overflow-hidden">{user.fullname}</p></Table.Cell>
+                    <Table.Cell><p className="whitespace-nowrap w-30 text-ellipsis overflow-hidden">{user.username}</p></Table.Cell>
                     <Table.Cell>{user.email}</Table.Cell>
                     <Table.Cell>{user.isAdmin ? <FaCheck color='green' /> : <RxCross2 color='red' />}</Table.Cell>
                     <Table.Cell>
