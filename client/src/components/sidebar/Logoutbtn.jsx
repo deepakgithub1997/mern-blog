@@ -1,7 +1,9 @@
-import { Button } from 'flowbite-react';
 import { HiOutlineLogout } from "react-icons/hi";
+import { useDispatch } from 'react-redux';
+import { signoutSuccess } from '../../redux/user/userSlice.js';
 
 const Logoutbtn = () => {
+  const dispatch = useDispatch();
   const handleSignOut = async (e) => {
     try {
       const res = await fetch('/api/user/signout', {

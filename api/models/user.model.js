@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema({
   gender: {
     type: String,
     enum: ['Male', 'Female', 'Non-binary'],
-    required: true
   }
 }, { timestamps: true });
 

@@ -7,7 +7,7 @@ export const sendMessage = async (req, res, next) => {
     const { id: receiverId } = req.params;
     const senderId = req.user.id;
 
-    const conversation = await Conversation.findOne({
+    let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] }
     })
 
@@ -31,10 +31,8 @@ export const sendMessage = async (req, res, next) => {
 
     //SOCKET IO Functionality will go here 
 
-    // conversation.save();
-    // newMessage .save();
-
     await Promise.all([conversation.save(), newMessage.save()]);
+
     res.status(201).json(newMessage);
 
   } catch (error) {
@@ -46,10 +44,6 @@ export const getMessages = async (req, res, next) => {
   try {
     const senderId = req.user.id;
     const { id: userToChatId } = req.params;
-
-    console.log(senderId);
-    console.log(userToChatId);
-
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, userToChatId] },
     }).populate("messages");

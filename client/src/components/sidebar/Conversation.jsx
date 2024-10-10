@@ -1,19 +1,23 @@
 import { RxAvatar } from "react-icons/rx";
+import useConversation from "../../zustand/useConversation";
 
+const Conversation = ({ filteredUser }) => {
+  const { selectedConversation, setSelectedConversation } = useConversation();
 
-const Conversation = () => {
+  const isSelected = selectedConversation?._id === filteredUser._id;
   return (
     <>
-      <div className='flex gap-2 items-center hover:bg-[#3f83f880] hover:dark:bg-[rgb(16,23,42)]  rounded px-1 py-2 cursor-pointer'>
+      <div className={`flex gap-2 items-center hover:bg-[#3f83f880] hover:dark:bg-[rgb(16,23,42)]  rounded px-2 py-2 cursor-pointer  ${isSelected ? "dark:bg-[rgb(16,23,42)]" : ""}`}
+        onClick={() => setSelectedConversation(filteredUser)}
+      >
         <div className='avatar online'>
           <div className='w-10 rounded-full'>
-            <RxAvatar className="text-2xl" />
+            <img src={filteredUser.profilePicture} className='rounded-full w-8' />
           </div>
         </div>
         <div className='flex flex-col flex-1'>
           <div className='flex gap-3 justify-between'>
-            <p>John Doe</p>
-            <span className='text-xl'>🎃</span>
+            <p className="capitalize">{filteredUser.fullname}</p>
           </div>
         </div>
       </div>
