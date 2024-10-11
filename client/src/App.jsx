@@ -15,11 +15,12 @@ import Updatepost from './pages/Updatepost';
 import PostPage from './pages/PostPage';
 import ScrollToTop from './components/ScrollToTop';
 import Search from './pages/Search';
-
+import { Toaster } from 'react-hot-toast';
 const App = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <Toaster />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
