@@ -1,22 +1,30 @@
-import React from 'react'
+import { useSelector } from 'react-redux';
+import useConversation from '../../zustand/useConversation';
+import { extractTime } from '../../utils/extractTime.js';
 
 const Message = ({ message }) => {
+  const { currentUser } = useSelector((state) => state.user);
+  const { selectedConversation } = useConversation();
+  const fromMe = currentUser._id === message.senderId;
+  const formattedTime = extractTime(message.createdAt);
+  const chatClassName = fromMe ? "messagereceived" : "messagesent";
+  const profilePic = fromMe ? currentUser.profilePicture : selectedConversation.profilePicture;
+
   return (
     <>
-
-      <div className="messagesent">
+      <div className={`mb-3 ${chatClassName}`}>
         <div className="messagecard">
           <div className="w-10 h-10 rounded-full border border-slate-600 overflow-hidden">
-            <img className="w-full " src="https://firebasestorage.googleapis.com/v0/b/mern-blog-58682.appspot.com/o/1727155945687avataaars%20(1).png?alt=media&token=fe953332-18fa-42e6-bfcf-88cabce50fd0" alt="User 1" />
+            <img className="w-full " src={profilePic} alt="User 1" />
           </div>
           <div>
             <div className="chatbubble text-sm bg-indigo-500 p-3 rounded-lg">
               {message.message}
             </div>
-            <div className="time text-xs font-medium text-gray-500">21:40</div>
+            <div className="time text-xs font-medium text-gray-500">{formattedTime}</div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   )
 }

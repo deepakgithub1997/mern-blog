@@ -33,7 +33,7 @@ const DashSidebar = () => {
     }
   }
   return (
-    <Sidebar className='min-w-[250px] h-[510px] w-full md:w-56'>
+    <Sidebar className='min-w-[250px] h-[510px] md:h-auto w-full md:w-56'>
       <Sidebar.Items >
         <Sidebar.ItemGroup className='flex flex-col flex-1'>
           {currentUser && currentUser.isAdmin && (
